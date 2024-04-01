@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "1494bbde-f8e3-4c87-a2ad-33e6a4aeea0f",
+		"name": "Film Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33996059"
+	},
+	"item": [
+		{
+			"name": "Get a Film",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"  pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a film\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"titre\");",
+							"    pm.expect(jsonData).to.have.property(\"description\");",
+							"    pm.expect(jsonData.acteurs).to.be.an(\"array\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/film/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"film",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Film",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', () => {",
+							"    pm.expect(pm.response.code).to.eql(201);",
+							"})",
+							"",
+							"pm.test(\"Response has a created film\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
+							"    pm.expect(jsonData).to.have.property(\"titre\");",
+							"    pm.expect(jsonData).to.have.property(\"description\");",
+							"    pm.expect(jsonData.acteurs).to.be.an(\"array\");",
+							"});",
+							"",
+							"pm.test('Created Film has datas', function () {",
+							"    var responseJson = pm.response.json();",
+							"    pm.expect(responseJson.titre).to.eql('Star Wars: The Empire Strikes Back');",
+							"    pm.expect(responseJson.description).to.eql('Darth Vader is adamant about turning Luke Skywalker to the dark side.');",
+							"    pm.expect(responseJson.acteurs).to.have.lengthOf(2);",
+							"    var acteur1 = responseJson.acteurs.find(act => act.nom === 'Ford' && act.prenom === 'Harrison');",
+							"    pm.expect(acteur1).to.not.be.undefined;",
+							"    pm.expect(acteur1.nom).to.eql('Ford');",
+							"    pm.expect(acteur1.prenom).to.eql('Harrison');",
+							"    var acteur2 = responseJson.acteurs.find(act => act.nom === 'Hamill' && act.prenom === 'Mark');",
+							"    pm.expect(acteur2).to.not.be.undefined;",
+							"    pm.expect(acteur2.nom).to.eql('Hamill');",
+							"    pm.expect(acteur2.prenom).to.eql('Mark');",
+							"})",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"titre\":\"Star Wars: The Empire Strikes Back\",\n   \"description\":\"Darth Vader is adamant about turning Luke Skywalker to the dark side.\",\n   \"acteurs\":[\n      {\n         \"nom\":\"Ford\",\n         \"prenom\":\"Harrison\"\n      },\n      {\n         \"nom\":\"Hamill\",\n         \"prenom\":\"Mark\"\n      }\n   ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/film",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"film"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
